@@ -11,8 +11,10 @@
   "dependencies": {
     "cors": "^2.8.5",
     "express": "^4.18.0",
+    "path": "^0.12.7",
     "sqlite": "^4.1.1",
-    "sqlite3": "^5.0.5"
+    "sqlite3": "^5.0.5",
+    "url": "^0.11.0"
   },
   "type": "module"
 }

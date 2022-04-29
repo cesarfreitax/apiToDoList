@@ -1,20 +1,13 @@
 import { Router } from "express";
-import {
-    testApi,
-    insertFornecedor,
-    selectFornecedor,
-    selectFornecedores,
-    updateFornecedor,
-    deleteFornecedor
-} from "./controllers/Fornecedor.js";
+import { insertFornecedor,sltFornecedor, sltFornecedores, uptFornecedor, delFornecedor } from "./controllers/Fornecedor.js";
 
 const router = Router();
 
-router.get('/', testApi);
+// router.get('/', testApi);
 router.post('/fornecedor', insertFornecedor);
-router.get('/fornecedor', selectFornecedor);
-router.get('/fornecedores', selectFornecedores);
-router.put('/fornecedor', updateFornecedor);
-router.delete('/fornecedor', deleteFornecedor);
+router.get('/fornecedor/:id', sltFornecedor);
+router.get('/fornecedores', sltFornecedores);
+router.put('/fornecedor/:id', uptFornecedor);
+router.delete('/fornecedor/:id', delFornecedor);
 
 export default router;

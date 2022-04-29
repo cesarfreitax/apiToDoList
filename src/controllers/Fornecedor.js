@@ -1,51 +1,57 @@
-import { openDb } from "../infra/configDB.js";
-import { ValidacoesFornecedores } from "../services/validacoesFornecedores.js";
-
-export async function testApi(req, res){
-    res.status(200).json({"Mensagem": "Tudo certo!"})
-}
+import DatabaseMetodosFornecedores from "../DAO/DatabaseMetodosFornecedores.js"
+import FornecedoresModel from "../models/FornecedoresModel.js"
 
 export async function insertFornecedor(req, res) {
     try {
-        if(ValidacoesFornecedores.validaInsertAndUpdate(req.body.nome, req.body.ramo, req.body.cnpj)){
-        let fornecedor = req.body;
-        openDb().then(db => {
-            db.run(`INSERT INTO Fornecedor (nome, ramo, cnpj) VALUES (?, ?, ?)`, [fornecedor.nome, fornecedor.ramo, fornecedor.cnpj]);
-            res.status(201).json({"Mensagem": "Fornecedor adicionado com sucesso!"})
-        })
-    } else {
-        throw new Error(`CNPJ precisa ter 14 números.`)
-    }
+        const tabela = await DatabaseMetodosFornecedores.tableFornecedores();
+        const fornecedor = new FornecedoresModel(...Object.values(req.body));
+        const response = await DatabaseMetodosFornecedores.inserirFornecedor(fornecedor)
+        res.status(201).json(response)
     } catch (e) {
-        res.status(400).json(e.message)
+        res.status(400).json({ erro: e.message });
     }
 }
 
-export async function updateFornecedor(req, res) {
-    let fornecedor = req.body;
-    openDb().then(db => {
-        db.run(`UPDATE Fornecedor SET nome=?, ramo=?, cnpj=? WHERE id=?`, [fornecedor.nome, fornecedor.ramo, fornecedor.cnpj, fornecedor.id]);
-        res.status(200).json({"Mensagem": "Fornecedor atualizado com sucesso!"})
-    })
+export async function uptFornecedor(req, res) {
+    const id = req.body.id
+    const nome = req.body.nome
+    const ramo = req.body.produto
+    const cnpj = req.body.preco
+    try {
+        const pedido = new PedidosModel(id,nome,produto,preco);
+        console.log(pedido)
+        console.log(req.body.id)
+        const response = await DatabaseMetodos.updatePedidoId(id,nome,produto,preco)
+        res.status(200).json(response)
+    } catch (e) {
+        res.status(400).json({ erro: e.message })
+    }
 }
 
-export async function selectFornecedores(req, res) {
-    openDb().then(db => {
-        db.all(`SELECT * FROM Fornecedor`).then(fornecedores => res.json(fornecedores));
-    })
+export async function sltFornecedor(req, res) {
+    
+    try {
+        const response = await DatabaseMetodosFornecedores.selecionarFornecedor(req.params.id);
+        res.status(200).json(response);
+    } catch (e) {
+        res.status(400).json({ erro: e.message })
+    };
 }
 
-export async function selectFornecedor(req, res) {
-    let id = req.body.id;
-    openDb().then(db => {
-    db.get(`SELECT * FROM Fornecedor WHERE id=?`, [id]).then(fornecedor => res.json(fornecedor));
-    })
+export async function sltFornecedores(req, res) {
+    try {
+        const response = await DatabaseMetodosFornecedores.selecionarFornecedores();
+        res.status(200).json(response);
+    } catch (e) {
+        res.status(400).json({ erro: e.message })
+    };
 }
 
-export async function deleteFornecedor(req, res) {
-    let id = req.body.id;
-    openDb().then(db => {
-    db.get(`DELETE FROM Fornecedor WHERE ID=?`, [id]).then(res => res);
-    })
-    res.status(200).json({"Mensagem": "Fornecedor deletado com sucesso!"})
-}
+export async function delFornecedor(req, res){
+    try{
+        const response = await DatabaseMetodosFornecedores.deletaFornecedor(req.params.id);
+        res.status(200).json(response);
+    } catch (e){
+        res.status(400).json({erro: e.message})
+    }
+};
