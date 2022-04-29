@@ -6,7 +6,7 @@ export async function createTableFornecedor() {
             id INTEGER PRIMARY KEY,
             nome TEXT,
             ramo TEXT,
-            cnpj VARCHAR
+            cnpj INTEGER
         )`)
     })
 }

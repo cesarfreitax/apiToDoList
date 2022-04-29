@@ -7,14 +7,14 @@ export async function testApi(req, res){
 
 export async function insertFornecedor(req, res) {
     try {
-        if(ValidacoesFornecedores.validaCnpj(req.body.cnpj) && ValidacoesFornecedores.validaNomeRamo(req.body.nome, req.body.ramo)){
+        if(ValidacoesFornecedores.validaInsertAndUpdate(req.body.nome, req.body.ramo, req.body.cnpj)){
         let fornecedor = req.body;
         openDb().then(db => {
             db.run(`INSERT INTO Fornecedor (nome, ramo, cnpj) VALUES (?, ?, ?)`, [fornecedor.nome, fornecedor.ramo, fornecedor.cnpj]);
             res.status(201).json({"Mensagem": "Fornecedor adicionado com sucesso!"})
         })
     } else {
-        throw new Error(`Nome e ramo precisam ter 3 ou + caracteres. CNPJ precisa ter 14 números.`)
+        throw new Error(`CNPJ precisa ter 14 números.`)
     }
     } catch (e) {
         res.status(400).json(e.message)
