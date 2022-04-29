@@ -13,18 +13,12 @@ export async function insertFornecedor(req, res) {
 }
 
 export async function uptFornecedor(req, res) {
-    const id = req.body.id
-    const nome = req.body.nome
-    const ramo = req.body.produto
-    const cnpj = req.body.preco
     try {
-        const pedido = new PedidosModel(id,nome,produto,preco);
-        console.log(pedido)
-        console.log(req.body.id)
-        const response = await DatabaseMetodos.updatePedidoId(id,nome,produto,preco)
+        const fornecedor = req.body;
+        const response = await DatabaseMetodosFornecedores.updateFornecedorId(fornecedor, req.params.id)
         res.status(200).json(response)
     } catch (e) {
-        res.status(400).json({ erro: e.message })
+        res.status(400).json(e.message)
     }
 }
 

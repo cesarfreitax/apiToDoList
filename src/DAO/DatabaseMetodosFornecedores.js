@@ -34,9 +34,10 @@ class DatabaseMetodosFornecedores {
     }
     
     static updateFornecedorId(fornecedor, id) {
-        const query = `UPDATE Fornecedores SET (id, nome, ramo, cnpj) = (?,?,?,?) WHERE id = ?`;
+        const query = `UPDATE Fornecedores SET (nome, ramo, cnpj) = (?,?,?) WHERE id = ?`;
+        const body = Object.values(fornecedor)
         return new Promise((resolve, reject) => {
-            Database.run(query, [...fornecedor, id], (e, result) => {
+            Database.run(query, [...body, id], (e, result) => {
                 if (e) {
                     reject(e.message)
                 } else {
