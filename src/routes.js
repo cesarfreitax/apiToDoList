@@ -1,9 +1,9 @@
 import { Router } from "express";
-import { insertFornecedor,sltFornecedor, sltFornecedores, uptFornecedor, delFornecedor } from "./controllers/Fornecedor.js";
+import { testApi, insertFornecedor,sltFornecedor, sltFornecedores, uptFornecedor, delFornecedor } from "./controllers/Fornecedor.js";
 
 const router = Router();
 
-// router.get('/', testApi);
+router.get('/', testApi);
 router.post('/fornecedor', insertFornecedor);
 router.get('/fornecedor/:id', sltFornecedor);
 router.get('/fornecedores', sltFornecedores);

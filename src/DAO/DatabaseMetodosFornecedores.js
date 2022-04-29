@@ -1,13 +1,9 @@
 import Database from "../infra/configDB.js";
 import { resolve } from "path";
-
 class DatabaseMetodosFornecedores {
+    
     static tableFornecedores() {
-        const fornecedor = `CREATE TABLE IF NOT EXISTS Fornecedores
-                         (id INTEGER PRIMARY KEY,
-                          nome TEXT,
-                          ramo TEXT,
-                          cnpj INTEGER)`
+        const fornecedor = `CREATE TABLE IF NOT EXISTS Fornecedores (id INTEGER PRIMARY KEY, nome TEXT, ramo TEXT,cnpj INTEGER)`
         return new Promise((resolve, reject) => {
             Database.run(fornecedor, (e) => {
                 if (e) {
@@ -27,12 +23,14 @@ class DatabaseMetodosFornecedores {
                 if (e) {
                     reject(e)
                 } else {
-                    resolve({ message: "Novo fornecedor cadastrado com sucesso" })
+                    resolve({
+                        "Mensagem": "Fornecedor cadastrado com sucesso!"
+                    })
                 }
             })
         })
     }
-    
+
     static updateFornecedorId(fornecedor, id) {
         const query = `UPDATE Fornecedores SET (nome, ramo, cnpj) = (?,?,?) WHERE id = ?`;
         const body = Object.values(fornecedor)
@@ -41,7 +39,9 @@ class DatabaseMetodosFornecedores {
                 if (e) {
                     reject(e.message)
                 } else {
-                    resolve(result)
+                    resolve({
+                        "Mensagem": "Fornecedor atualizado com sucesso!"
+                    })
                 }
             })
         })
@@ -60,14 +60,14 @@ class DatabaseMetodosFornecedores {
         })
     }
 
-static selecionarFornecedores() {
+    static selecionarFornecedores() {
         const query = `SELECT * FROM Fornecedores`;
         return new Promise((resolve, reject) => {
-            Database.all(query, (e, rows) => {
+            Database.all(query, (e, result) => {
                 if (e) {
                     reject(e.message)
                 } else {
-                    resolve({ rows: rows })
+                    resolve(result)
                 }
             })
         })
@@ -79,12 +79,13 @@ static selecionarFornecedores() {
                 if (e) {
                     reject(e.message)
                 } else {
-                    resolve({ message: "Fornecedor descadastrado, apagado da Database" })
+                    resolve({
+                        "Mensagem": "Fornecedor deletado com sucesso!"
+                    })
                 }
             })
         })
     }
 }
-
 
 export default DatabaseMetodosFornecedores;
